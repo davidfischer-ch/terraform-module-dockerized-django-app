@@ -3,7 +3,7 @@ resource "docker_container" "web" {
   # TODO Handle multiple web nodes
 
   image = var.image_id
-  name  = var.identifier
+  name  = "${var.identifier}-web"
 
   entrypoint = ["/usr/bin/bash", "-c"]
   command    = ["sleep infinity"]

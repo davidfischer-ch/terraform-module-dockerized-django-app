@@ -1,7 +1,7 @@
 resource "docker_container" "celery_beat" {
 
   image = var.image_id
-  name  = var.identifier
+  name  = "${var.identifier}-celery-beat"
 
   entrypoint = ["/usr/bin/bash", "-c"]
   command    = ["sleep infinity"]

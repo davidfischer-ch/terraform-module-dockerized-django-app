@@ -3,7 +3,7 @@ resource "docker_container" "celery_worker" {
   # TODO Handle multiple workers with multiple queues
 
   image = var.image_id
-  name  = var.identifier
+  name  = "${var.identifier}-celery-worker"
 
   entrypoint = ["/usr/bin/bash", "-c"]
   command    = ["sleep infinity"]
