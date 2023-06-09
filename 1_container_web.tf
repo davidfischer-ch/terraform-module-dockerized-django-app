@@ -5,9 +5,6 @@ resource "docker_container" "web" {
   image = var.image_id
   name  = "${var.identifier}-web"
 
-  entrypoint = ["/usr/bin/bash", "-c"]
-  command    = ["sleep infinity"]
-
   must_run = var.enabled
   start    = var.enabled
   restart  = "always"
