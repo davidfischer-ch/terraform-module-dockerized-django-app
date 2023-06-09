@@ -25,7 +25,7 @@ resource "docker_container" "web" {
   }
 
   ports {
-    internal = 80
+    internal = 8000
     external = var.http_port
     ip       = "0.0.0.0"
     protocol = "tcp"
