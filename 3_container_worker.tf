@@ -32,13 +32,13 @@ resource "docker_container" "celery_worker" {
 
   volumes {
     container_path = local.container_media_directory
-    host_path      = "${var.data_directory}/${var.identifier}/media"
+    host_path      = local.container_media_directory
     read_only      = false
   }
 
   volumes {
     container_path = local.container_static_directory
-    host_path      = "${var.data_directory}/${var.identifier}/static"
+    host_path      = local.container_static_directory
     read_only      = true
   }
 }

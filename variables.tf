@@ -21,7 +21,7 @@ variable "network_id" {
   type = string
 }
 
-variable "http_port" {
+variable "port" {
   type    = number
   default = 80
 }

@@ -23,7 +23,7 @@ resource "docker_container" "web" {
 
   ports {
     internal = 8000
-    external = var.http_port
+    external = var.port
     ip       = "0.0.0.0"
     protocol = "tcp"
   }
@@ -36,13 +36,13 @@ resource "docker_container" "web" {
 
   volumes {
     container_path = local.container_media_directory
-    host_path      = "${var.data_directory}/${var.identifier}/media"
+    host_path      = local.media_directory
     read_only      = false
   }
 
   volumes {
     container_path = local.container_static_directory
-    host_path      = "${var.data_directory}/${var.identifier}/static"
+    host_path      = local.static_directory
     read_only      = false
   }
 }

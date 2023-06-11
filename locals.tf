@@ -1,5 +1,7 @@
 locals {
   config_directory = "${var.data_directory}/${var.identifier}/config"
+  media_directory  = "${var.data_directory}/${var.identifier}/media"
+  static_directory = "${var.data_directory}/${var.identifier}/static"
 
   container_media_directory  = "/data/media"
   container_static_directory = "/data/static"
