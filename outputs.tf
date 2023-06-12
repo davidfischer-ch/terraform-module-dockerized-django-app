@@ -1,9 +1,9 @@
 output "media_directory" {
-  value = local.media_directory
+  value = local.host_media_directory
 }
 
 output "static_directory" {
-  value = local.static_directory
+  value = local.host_static_directory
 }
 
 output "host" {
