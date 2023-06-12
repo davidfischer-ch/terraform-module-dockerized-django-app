@@ -29,20 +29,20 @@ resource "docker_container" "web" {
   }
 
   volumes {
-    container_path = "/home/app/src/${var.project_name}/.env"
+    container_path = local.container_settings_path
     host_path      = local_file.settings.filename
     read_only      = true
   }
 
   volumes {
     container_path = local.container_media_directory
-    host_path      = local.media_directory
+    host_path      = local.host_media_directory
     read_only      = false
   }
 
   volumes {
     container_path = local.container_static_directory
-    host_path      = local.static_directory
+    host_path      = local.host_static_directory
     read_only      = false
   }
 }
