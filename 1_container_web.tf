@@ -21,13 +21,6 @@ resource "docker_container" "web" {
     name = var.network_id
   }
 
-  ports {
-    internal = 8000
-    external = var.port
-    ip       = "0.0.0.0"
-    protocol = "tcp"
-  }
-
   volumes {
     container_path = local.container_settings_path
     host_path      = local_file.settings.filename

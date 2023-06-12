@@ -23,7 +23,12 @@ variable "network_id" {
 
 variable "port" {
   type    = number
-  default = 80
+  default = 8000
+
+  validation {
+    condition     = var.port == 8000
+    error_message = "Having `port` different than 8000 is not yet implemented."
+  }
 }
 
 # Django Application
