@@ -30,13 +30,13 @@ resource "docker_container" "celery_beat" {
 
   volumes {
     container_path = local.container_media_directory
-    host_path      = local.container_media_directory
+    host_path      = local.media_directory
     read_only      = true
   }
 
   volumes {
     container_path = local.container_static_directory
-    host_path      = local.container_static_directory
+    host_path      = local.static_directory
     read_only      = true
   }
 }
