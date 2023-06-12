@@ -2,6 +2,12 @@ resource "docker_container" "celery_worker" {
 
   # TODO Handle multiple workers with multiple queues
 
+  lifecycle {
+    replace_triggered_by = [
+      local_file.settings
+    ]
+  }
+
   image = var.image_id
   name  = "${var.identifier}-celery-worker"
 

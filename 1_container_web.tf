@@ -2,6 +2,12 @@ resource "docker_container" "web" {
 
   # TODO Handle multiple web nodes
 
+  lifecycle {
+    replace_triggered_by = [
+      local_file.settings
+    ]
+  }
+
   image = var.image_id
   name  = "${var.identifier}-web"
 

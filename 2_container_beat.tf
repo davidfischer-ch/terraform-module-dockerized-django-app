@@ -1,5 +1,11 @@
 resource "docker_container" "celery_beat" {
 
+  lifecycle {
+    replace_triggered_by = [
+      local_file.settings
+    ]
+  }
+
   image = var.image_id
   name  = "${var.identifier}-celery-beat"
 
