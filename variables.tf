@@ -135,7 +135,7 @@ variable "managers" {
   default = []
 }
 
-# Broker
+# Broker Endpoint
 
 variable "broker_host" {
   type = string
@@ -175,7 +175,7 @@ variable "cache_password" {
   sensitive = true
 }
 
-# Database
+# Database Endpoint
 
 variable "database_host" {
   type = string
@@ -197,4 +197,52 @@ variable "database_user" {
 variable "database_password" {
   type      = string
   sensitive = true
+}
+
+# Web Container
+
+# Check web log level in
+variable "web" {
+  type = object({
+    concurrency   = optional(number, 1)
+    log_level     = optional(string, "info")
+    extra_options = optional(list(string), [])
+  })
+
+  validation {
+    condition     = contains(["critical", "error", "warning", "info", "debug", "trace"], var.web.log_level)
+    error_message = "Log level should be one of `critical`, `error`, `warning`, `info`, `debug`, `trace`"
+  }
+}
+
+# Workers Containers
+
+variable "beat" {
+  type = object({
+    log_level     = optional(string, "info")
+    extra_options = optional(list(string), [])
+  })
+
+  validation {
+    condition     = contains(["debug", "info", "warning", "error", "critical", "fatal"], var.beat.log_level)
+    error_message = "Log level should be one of `debug`, `info`, `warning`, `error`, `critical`, `fatal`"
+  }
+}
+
+variable "workers" {
+  type = map(object({
+    name          = string
+    queues        = list(string)
+    log_level     = optional(string, "info")
+    extra_options = optional(list(string), [])
+  }))
+  description = "Celery workers settings. See `celery worker --help` for detailled description."
+
+  validation {
+    condition = alltrue([
+      for w in var.workers :
+      contains(["debug", "info", "warning", "error", "critical", "fatal"], w.log_level)
+    ])
+    error_message = "Log level should be one of `debug`, `info`, `warning`, `error`, `critical`, `fatal`"
+  }
 }

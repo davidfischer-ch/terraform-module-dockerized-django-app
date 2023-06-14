@@ -1,11 +1,13 @@
 locals {
-  container_settings_path    = "/home/app/src/${var.project_name}/.env"
-  container_media_directory  = "/data/media"
-  container_static_directory = "/data/static"
+  container_settings_path     = "/home/app/src/${var.project_name}/.env"
+  container_media_directory   = "/data/media"
+  container_static_directory  = "/data/static"
+  container_workers_directory = "/data/workers"
 
-  host_config_directory = "${var.data_directory}/config"
-  host_media_directory  = "${var.data_directory}/media"
-  host_static_directory = "${var.data_directory}/static"
+  host_config_directory  = "${var.data_directory}/config"
+  host_media_directory   = "${var.data_directory}/media"
+  host_static_directory  = "${var.data_directory}/static"
+  host_workers_directory = "${var.data_directory}/workers"
 
   settings = merge(var.settings, local.forced_settings)
 

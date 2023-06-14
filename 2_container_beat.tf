@@ -1,4 +1,4 @@
-resource "docker_container" "celery_beat" {
+resource "docker_container" "beat" {
 
   lifecycle {
     replace_triggered_by = [
@@ -7,10 +7,15 @@ resource "docker_container" "celery_beat" {
   }
 
   image = var.image_id
-  name  = "${var.identifier}-celery-beat"
+  name  = "${var.identifier}-beat"
 
-  entrypoint = ["/usr/bin/bash", "-c"]
-  command    = ["sleep infinity"]
+  command = concat([
+    "celery",
+    "--app", var.project_name,
+    "beat",
+    "--loglevel", upper(var.beat.log_level),
+    "--schedule", "${local.container_workers_directory}/beat.db"
+  ], var.beat.extra_options)
 
   must_run = var.enabled
   start    = var.enabled
@@ -22,7 +27,7 @@ resource "docker_container" "celery_beat" {
   env = [
   ]
 
-  hostname = "${var.identifier}-celery-beat"
+  hostname = "${var.identifier}-beat"
 
   networks_advanced {
     name = var.network_id
@@ -44,5 +49,11 @@ resource "docker_container" "celery_beat" {
     container_path = local.container_static_directory
     host_path      = local.host_static_directory
     read_only      = true
+  }
+
+  volumes {
+    container_path = local.container_workers_directory
+    host_path      = local.host_workers_directory
+    read_only      = false
   }
 }

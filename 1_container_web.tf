@@ -11,6 +11,17 @@ resource "docker_container" "web" {
   image = var.image_id
   name  = "${var.identifier}-web"
 
+  command = [
+    "uvicorn",
+    "${var.project_name}.asgi:application",
+    "--host", "0.0.0.0",
+    "--port", var.port,
+    "--interface", "asgi3",
+    "--proxy-headers",
+    "--log-level", upper(var.web.log_level),
+    "--workers", var.web.concurrency
+  ]
+
   must_run = var.enabled
   start    = var.enabled
   restart  = "always"

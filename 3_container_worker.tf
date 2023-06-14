@@ -1,6 +1,6 @@
-resource "docker_container" "celery_worker" {
+resource "docker_container" "workers" {
 
-  # TODO Handle multiple workers with multiple queues
+  for_each = var.workers
 
   lifecycle {
     replace_triggered_by = [
@@ -9,10 +9,17 @@ resource "docker_container" "celery_worker" {
   }
 
   image = var.image_id
-  name  = "${var.identifier}-celery-worker"
+  name  = "${var.identifier}-worker-${each.key}"
 
-  entrypoint = ["/usr/bin/bash", "-c"]
-  command    = ["sleep infinity"]
+  command = concat([
+    "celery",
+    "--app", var.project_name,
+    "worker",
+    "--hostname", each.value.name,
+    "--loglevel", upper(each.value.log_level),
+    "--queues", join(",", each.value.queues),
+    "--statedb", "${local.container_workers_directory}/worker-${each.key}.db"
+  ], each.value.extra_options)
 
   must_run = var.enabled
   start    = var.enabled
@@ -24,7 +31,7 @@ resource "docker_container" "celery_worker" {
   env = [
   ]
 
-  hostname = "${var.identifier}-celery-worker"
+  hostname = "${var.identifier}-worker-${each.key}"
 
   networks_advanced {
     name = var.network_id
@@ -46,5 +53,11 @@ resource "docker_container" "celery_worker" {
     container_path = local.container_static_directory
     host_path      = local.host_static_directory
     read_only      = true
+  }
+
+  volumes {
+    container_path = local.container_workers_directory
+    host_path      = local.host_workers_directory
+    read_only      = false
   }
 }
