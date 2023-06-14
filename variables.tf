@@ -8,7 +8,7 @@ variable "enabled" {
 
 variable "image_id" {
   type        = string
-  description = "Diet image's ID."
+  description = "Django application's image ID."
 }
 
 variable "data_directory" {
@@ -38,6 +38,10 @@ variable "project_name" {
   description = "Django project's name (directory), for example DietApp."
 }
 
+variable "site_name" {
+  type = string
+}
+
 variable "settings" {
   type        = map(string)
   default     = {}
@@ -49,11 +53,6 @@ variable "admin_url" {
   default = "admin"
 }
 
-variable "site_name" {
-  type    = string
-  default = "Diet Application"
-}
-
 variable "compress_enabled" {
   type    = bool
   default = false
@@ -62,6 +61,10 @@ variable "compress_enabled" {
 variable "compress_offline" {
   type    = bool
   default = false
+}
+
+variable "csrf_trusted_origins" {
+  type = list(string)
 }
 
 variable "debug" {
@@ -116,8 +119,7 @@ variable "email_port" {
 }
 
 variable "email_subject_prefix" {
-  type    = string
-  default = "[Diet Application | DEV] "
+  type = string
 }
 
 variable "email_use_ssl" {
@@ -201,7 +203,6 @@ variable "database_password" {
 
 # Web Container
 
-# Check web log level in
 variable "web" {
   type = object({
     concurrency   = optional(number, 1)

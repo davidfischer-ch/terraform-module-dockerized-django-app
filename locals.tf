@@ -24,6 +24,7 @@ locals {
     COMMON_SITE_NAME                = var.site_name,
     COMPRESS_ENABLED                = var.compress_enabled ? "True" : "False",
     COMPRESS_OFFLINE                = var.compress_enabled && var.compress_offline ? "True" : "false",
+    CSRF_TRUSTED_ORIGINS            = join(" ", var.csrf_trusted_origins),
     DATABASE_HOST                   = var.database_host,
     DATABASE_NAME                   = var.database_name,
     DATABASE_PASSWORD               = var.database_password,
