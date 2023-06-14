@@ -11,14 +11,14 @@ resource "docker_container" "web" {
   image = var.image_id
   name  = "${var.identifier}-web"
 
-  command = [
+  entrypoint = [
     "uvicorn",
     "${var.project_name}.asgi:application",
     "--host", "0.0.0.0",
     "--port", var.port,
     "--interface", "asgi3",
     "--proxy-headers",
-    "--log-level", upper(var.web.log_level),
+    "--log-level", lower(var.web.log_level),
     "--workers", var.web.concurrency
   ]
 

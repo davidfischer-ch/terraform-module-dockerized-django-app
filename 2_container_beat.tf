@@ -9,7 +9,7 @@ resource "docker_container" "beat" {
   image = var.image_id
   name  = "${var.identifier}-beat"
 
-  command = concat([
+  entrypoint = concat([
     "celery",
     "--app", var.project_name,
     "beat",

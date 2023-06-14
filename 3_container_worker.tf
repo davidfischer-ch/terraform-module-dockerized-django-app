@@ -11,7 +11,7 @@ resource "docker_container" "workers" {
   image = var.image_id
   name  = "${var.identifier}-worker-${each.key}"
 
-  command = concat([
+  entrypoint = concat([
     "celery",
     "--app", var.project_name,
     "worker",
