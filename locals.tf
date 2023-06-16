@@ -21,7 +21,6 @@ locals {
     CACHE_INDEX                     = var.cache_index,
     CACHE_PASSWORD                  = var.cache_password,
     CACHE_PORT                      = var.cache_port,
-    COMMON_SITE_NAME                = var.site_name,
     COMPRESS_ENABLED                = var.compress_enabled ? "True" : "False",
     COMPRESS_OFFLINE                = var.compress_enabled && var.compress_offline ? "True" : "false",
     CSRF_TRUSTED_ORIGINS            = join(" ", var.csrf_trusted_origins),
