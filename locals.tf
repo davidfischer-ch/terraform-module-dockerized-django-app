@@ -1,13 +1,15 @@
 locals {
-  container_settings_path     = "/home/app/src/${var.project_name}/.env"
-  container_media_directory   = "/data/media"
-  container_static_directory  = "/data/static"
-  container_workers_directory = "/data/workers"
+  container_settings_path       = "/home/app/src/${var.project_name}/.env"
+  container_media_directory     = "/data/media"
+  container_protected_directory = "/data/protected"
+  container_static_directory    = "/data/static"
+  container_workers_directory   = "/data/workers"
 
-  host_config_directory  = "${var.data_directory}/config"
-  host_media_directory   = "${var.data_directory}/media"
-  host_static_directory  = "${var.data_directory}/static"
-  host_workers_directory = "${var.data_directory}/workers"
+  host_config_directory    = "${var.data_directory}/config"
+  host_media_directory     = "${var.data_directory}/media"
+  host_protected_directory = "${var.data_directory}/protected"
+  host_static_directory    = "${var.data_directory}/static"
+  host_workers_directory   = "${var.data_directory}/workers"
 
   settings = merge(var.settings, local.forced_settings)
 
@@ -48,6 +50,7 @@ locals {
     EMAIL_USE_TLS                   = var.email_use_tls ? "True" : "False",
     MANAGERS                        = join(" ", var.managers),
     MEDIA_ROOT                      = local.container_media_directory,
+    PROTECTED_ROOT                  = local.container_protected_directory,
     SECRET_KEY                      = random_string.secret_key.result,
     STATIC_ROOT                     = local.container_static_directory
   }

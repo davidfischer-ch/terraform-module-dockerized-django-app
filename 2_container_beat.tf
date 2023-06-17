@@ -40,18 +40,6 @@ resource "docker_container" "beat" {
   }
 
   volumes {
-    container_path = local.container_media_directory
-    host_path      = local.host_media_directory
-    read_only      = true
-  }
-
-  volumes {
-    container_path = local.container_static_directory
-    host_path      = local.host_static_directory
-    read_only      = true
-  }
-
-  volumes {
     container_path = local.container_workers_directory
     host_path      = local.host_workers_directory
     read_only      = false

@@ -51,6 +51,12 @@ resource "docker_container" "web" {
   }
 
   volumes {
+    container_path = local.container_protected_directory
+    host_path      = local.host_protected_directory
+    read_only      = false
+  }
+
+  volumes {
     container_path = local.container_static_directory
     host_path      = local.host_static_directory
     read_only      = false
