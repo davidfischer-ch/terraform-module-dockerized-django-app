@@ -12,6 +12,8 @@ locals {
   settings = merge(var.settings, local.forced_settings)
 
   forced_settings = {
+    ADMIN_EMAIL                     = var.admin_email,
+    ADMIN_NAME                      = var.admin_name,
     ADMIN_URL                       = var.admin_url,
     BROKER_HOST                     = var.broker_host,
     BROKER_INDEX                    = var.broker_index,
