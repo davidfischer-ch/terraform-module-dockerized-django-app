@@ -2,6 +2,10 @@ output "media_directory" {
   value = local.host_media_directory
 }
 
+output "protected_directory" {
+  value = local.host_protected_directory
+}
+
 output "static_directory" {
   value = local.host_static_directory
 }
