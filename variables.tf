@@ -1,9 +1,15 @@
 variable "identifier" {
-  type = string
+  type        = string
+  description = "Identifier (must be unique, used to name resources)."
+  validation {
+    condition     = regex("^[a-z]+(-[a-z0-9]+)*$", var.identifier) != null
+    error_message = "Argument `identifier` must match regex ^[a-z]+(-[a-z0-9]+)*$."
+  }
 }
 
 variable "enabled" {
-  type = bool
+  type        = bool
+  description = "Toggle the containers (started or stopped)."
 }
 
 variable "image_id" {
@@ -12,13 +18,15 @@ variable "image_id" {
 }
 
 variable "data_directory" {
-  type = string
+  type        = string
+  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
 # Networking
 
 variable "network_id" {
-  type = string
+  type        = string
+  description = "Attach the containers to given network."
 }
 
 variable "port" {
@@ -35,11 +43,12 @@ variable "port" {
 
 variable "project_name" {
   type        = string
-  description = "Django project's name (directory), for example DietApp."
+  description = "Django project's name (directory), for example \"DietApp\"."
 }
 
 variable "site_name" {
-  type = string
+  type        = string
+  description = "Django site's name, for example \"Diet Application\"."
 }
 
 variable "settings" {
