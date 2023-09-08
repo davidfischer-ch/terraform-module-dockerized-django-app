@@ -222,10 +222,10 @@ variable "database_password" {
 
 variable "web" {
   type = object({
-    concurrency   = optional(number, 1)
-    log_level     = optional(string, "info")
-    extra_options = optional(list(string), [])
+    concurrency = optional(number, 1)
+    log_level   = optional(string, "info")
   })
+  description = "Web engine settings."
 
   validation {
     condition     = contains(["critical", "error", "warning", "info", "debug", "trace"], var.web.log_level)
@@ -240,6 +240,7 @@ variable "beat" {
     log_level     = optional(string, "info")
     extra_options = optional(list(string), [])
   })
+  description = "Celery beat settings."
 
   validation {
     condition     = contains(["debug", "info", "warning", "error", "critical", "fatal"], var.beat.log_level)
