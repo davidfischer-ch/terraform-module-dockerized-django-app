@@ -12,7 +12,7 @@ resource "docker_container" "web" {
   name  = "${var.identifier}-web"
 
   entrypoint = [
-    "uvicorn",
+    "${var.venv_directory}/bin/uvicorn",
     "${var.project_name}.asgi:application",
     "--host", "0.0.0.0",
     "--port", var.port,

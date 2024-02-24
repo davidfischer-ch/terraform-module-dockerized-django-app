@@ -12,7 +12,7 @@ resource "docker_container" "workers" {
   name  = "${var.identifier}-worker-${each.key}"
 
   entrypoint = concat([
-    "celery",
+    "${var.venv_directory}/bin/celery",
     "--app", var.project_name,
     "worker",
     "--hostname", each.value.name,
