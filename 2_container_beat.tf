@@ -10,7 +10,7 @@ resource "docker_container" "beat" {
   name  = "${var.identifier}-beat"
 
   entrypoint = concat([
-    "${var.venv_directory}/bin/celery",
+    "celery",
     "--app", var.project_name,
     "beat",
     "--loglevel", upper(var.beat.log_level),
