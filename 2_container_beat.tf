@@ -24,8 +24,15 @@ resource "docker_container" "beat" {
 
   # shm_size = 256 # MB
 
-  env = [
-  ]
+  env = []
+
+  dynamic "host" {
+    for_each = var.hosts
+    content {
+      host = host.key
+      ip   = host.value
+    }
+  }
 
   hostname = "${var.identifier}-beat"
 

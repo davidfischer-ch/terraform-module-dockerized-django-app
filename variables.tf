@@ -22,7 +22,13 @@ variable "data_directory" {
   description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
-# Networking
+# Networking ---------------------------------------------------------------------------------------
+
+variable "hosts" {
+  type        = map(string)
+  default     = {}
+  description = "Add entries to container hosts file."
+}
 
 variable "network_id" {
   type        = string
@@ -39,7 +45,7 @@ variable "port" {
   }
 }
 
-# Django Application
+# Django Application -------------------------------------------------------------------------------
 
 variable "project_name" {
   type        = string
@@ -154,7 +160,7 @@ variable "managers" {
   default = []
 }
 
-# Broker Endpoint
+# Broker Endpoint ----------------------------------------------------------------------------------
 
 variable "broker_host" {
   type = string
@@ -194,7 +200,7 @@ variable "cache_password" {
   sensitive = true
 }
 
-# Database Endpoint
+# Database Endpoint --------------------------------------------------------------------------------
 
 variable "database_host" {
   type = string
@@ -218,7 +224,7 @@ variable "database_password" {
   sensitive = true
 }
 
-# Web Container
+# Web Container ------------------------------------------------------------------------------------
 
 variable "web" {
   type = object({
@@ -233,7 +239,7 @@ variable "web" {
   }
 }
 
-# Workers Containers
+# Workers Containers -------------------------------------------------------------------------------
 
 variable "beat" {
   type = object({

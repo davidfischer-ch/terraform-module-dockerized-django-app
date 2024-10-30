@@ -28,8 +28,15 @@ resource "docker_container" "workers" {
 
   # shm_size = 256 # MB
 
-  env = [
-  ]
+  env = []
+
+  dynamic "host" {
+    for_each = var.hosts
+    content {
+      host = host.key
+      ip   = host.value
+    }
+  }
 
   hostname = "${var.identifier}-worker-${each.key}"
 
