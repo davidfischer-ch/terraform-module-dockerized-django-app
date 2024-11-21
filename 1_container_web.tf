@@ -45,27 +45,38 @@ resource "docker_container" "web" {
     name = var.network_id
   }
 
+  # Config owner root:root
   volumes {
     container_path = local.container_settings_path
     host_path      = local_file.settings.filename
     read_only      = true
   }
 
+  # Media owner <app>:<app>
   volumes {
     container_path = local.container_media_directory
     host_path      = local.host_media_directory
     read_only      = false
   }
 
+  # Protected owner root:root
   volumes {
     container_path = local.container_protected_directory
     host_path      = local.host_protected_directory
     read_only      = false
   }
 
+  # Static owner <app>:<app>
   volumes {
     container_path = local.container_static_directory
     host_path      = local.host_static_directory
     read_only      = false
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+      chown "${var.data_owner}" "${local.host_media_directory}"
+      chown "${var.data_owner}" "${local.host_static_directory}"
+    EOT
   }
 }

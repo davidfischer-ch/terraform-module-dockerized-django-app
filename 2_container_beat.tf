@@ -40,15 +40,23 @@ resource "docker_container" "beat" {
     name = var.network_id
   }
 
+  # Config owner root:root
   volumes {
     container_path = local.container_settings_path
     host_path      = local_file.settings.filename
     read_only      = true
   }
 
+  # Workers owner <app>:<app>
   volumes {
     container_path = local.container_workers_directory
     host_path      = local.host_workers_directory
     read_only      = false
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+      chown "${var.data_owner}" "${local.host_workers_directory}"
+    EOT
   }
 }
