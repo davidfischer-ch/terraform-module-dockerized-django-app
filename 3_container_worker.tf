@@ -44,6 +44,8 @@ resource "docker_container" "workers" {
     name = var.network_id
   }
 
+  network_mode = "bridge"
+
   # Config owner root:root
   volumes {
     container_path = local.container_settings_path
