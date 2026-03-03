@@ -12,6 +12,8 @@ Manage a standardized Django application's Web and Celery components.
 
 ## Usage
 
+See [django-stack examples](https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/tree/main/examples) for a complete working configuration.
+
 ```hcl
 module "app" {
   source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.0.1"
@@ -30,12 +32,10 @@ module "app" {
 
   project_name         = "MyProject"
   site_name            = "My Application"
-  admin_name           = "Admin"
+  admin_name           = "Admin User"
   admin_email          = "admin@example.com"
   csrf_trusted_origins = ["https://my-app.example.com"]
   debug                = false
-  debug_toolbar        = false
-  debug_toolbar_template_profiler = false
   default_from_email   = "noreply@example.com"
   domains              = ["my-app.example.com"]
   email_subject_prefix = "[My App] "
@@ -73,8 +73,8 @@ module "app" {
 
   workers = {
     default = {
-      name      = "default-worker"
-      queues    = ["celery"]
+      name      = "default"
+      queues    = ["default"]
       log_level = "info"
     }
   }
