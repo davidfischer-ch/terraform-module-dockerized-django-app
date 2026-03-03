@@ -23,7 +23,7 @@ module "app" {
 
   # Networking
 
-  hosts      = module.fisch3r_net.lan_hosts
+  hosts      = { "myserver" = "10.0.0.1" }
   network_id = docker_network.app.id
 
   # Django Application
