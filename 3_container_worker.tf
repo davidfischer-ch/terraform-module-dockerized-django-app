@@ -26,6 +26,18 @@ resource "docker_container" "workers" {
   restart  = "always"
   # wait   = true
 
+  privileged = var.privileged
+
+  dynamic "capabilities" {
+    for_each = length(var.cap_add) + length(var.cap_drop) > 0 ? [1] : []
+    content {
+      add  = var.cap_add
+      drop = var.cap_drop
+    }
+  }
+
+  user = "${var.app_uid}:${var.app_gid}"
+
   # shm_size = 256 # MB
 
   env = []
@@ -83,9 +95,9 @@ resource "docker_container" "workers" {
 
   provisioner "local-exec" {
     command = <<EOT
-      chown "${var.data_owner}" "${local.host_media_directory}"
-      chown "${var.data_owner}" "${local.host_static_directory}"
-      chown "${var.data_owner}" "${local.host_workers_directory}"
+      chown ${var.app_uid}:${var.app_gid} "${local.host_media_directory}"
+      chown ${var.app_uid}:${var.app_gid} "${local.host_static_directory}"
+      chown ${var.app_uid}:${var.app_gid} "${local.host_workers_directory}"
     EOT
   }
 }
