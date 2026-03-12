@@ -17,17 +17,36 @@ variable "image_id" {
   description = "Django application's image ID."
 }
 
-# Storage ------------------------------------------------------------------------------------------
+# Process ------------------------------------------------------------------------------------------
 
-variable "data_directory" {
-  type        = string
-  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
+variable "app_uid" {
+  type        = number
+  default     = 1001
+  description = "UID of the user running the container and owning the data."
 }
 
-variable "data_owner" {
-  type        = string
-  default     = "1001:1001"
-  description = "Used to set the ownership of application's data directories."
+variable "app_gid" {
+  type        = number
+  default     = 1001
+  description = "GID of the user running the container and owning the data."
+}
+
+variable "privileged" {
+  type        = bool
+  default     = false
+  description = "Run the container in privileged mode."
+}
+
+variable "cap_add" {
+  type        = set(string)
+  default     = []
+  description = "Linux capabilities to add to the container."
+}
+
+variable "cap_drop" {
+  type        = set(string)
+  default     = []
+  description = "Linux capabilities to drop from the container."
 }
 
 # Networking ---------------------------------------------------------------------------------------
@@ -51,6 +70,13 @@ variable "port" {
     condition     = var.port == 8000
     error_message = "Having `port` different than 8000 is not yet implemented."
   }
+}
+
+# Storage ------------------------------------------------------------------------------------------
+
+variable "data_directory" {
+  type        = string
+  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
 # Django Application -------------------------------------------------------------------------------
