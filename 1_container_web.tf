@@ -59,7 +59,7 @@ resource "docker_container" "web" {
 
   network_mode = "bridge"
 
-  # Config owner root:root
+  # Config owner root:root (depending of how you called terraform apply)
   volumes {
     container_path = local.container_settings_path
     host_path      = local_file.settings.filename
@@ -73,7 +73,7 @@ resource "docker_container" "web" {
     read_only      = false
   }
 
-  # Protected owner root:root
+  # Protected owner <app>:<app>
   volumes {
     container_path = local.container_protected_directory
     host_path      = local.host_protected_directory
@@ -90,6 +90,7 @@ resource "docker_container" "web" {
   provisioner "local-exec" {
     command = <<EOT
       chown ${var.app_uid}:${var.app_gid} "${local.host_media_directory}"
+      chown ${var.app_uid}:${var.app_gid} "${local.host_protected_directory}"
       chown ${var.app_uid}:${var.app_gid} "${local.host_static_directory}"
     EOT
   }

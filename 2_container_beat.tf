@@ -54,7 +54,7 @@ resource "docker_container" "beat" {
 
   network_mode = "bridge"
 
-  # Config owner root:root
+  # Config owner root:root (depending of how you called terraform apply)
   volumes {
     container_path = local.container_settings_path
     host_path      = local_file.settings.filename
