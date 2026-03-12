@@ -8,15 +8,13 @@ Manage a standardized Django application's Web and Celery components.
 * Generates a random `SECRET_KEY` automatically
 * Supports Django Compressor, email backends, and debug toolbar
 
-> **TODO:** Set media & static directory's ownership to app user.
-
 ## Usage
 
 See [django-stack examples](https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/tree/main/examples) for a complete working configuration.
 
 ```hcl
 module "app" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.0.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.1.0"
 
   identifier     = "my-app"
   enabled        = true
@@ -102,7 +100,11 @@ data_directory/
 | `enabled` | `bool` | — | Start or stop the containers. |
 | `image_id` | `string` | — | Django application Docker image's ID (custom image). |
 | `data_directory` | `string` | — | Host path for persistent volumes. |
-| `data_owner` | `string` | `"1001:1001"` | UID:GID for data directories. |
+| `app_uid` | `number` | `1001` | UID of the user running the containers and owning the data directories. |
+| `app_gid` | `number` | `1001` | GID of the user running the containers and owning the data directories. |
+| `privileged` | `bool` | `false` | Run the containers in privileged mode. |
+| `cap_add` | `set(string)` | `[]` | Linux capabilities to add to the containers. |
+| `cap_drop` | `set(string)` | `[]` | Linux capabilities to drop from the containers. |
 | `hosts` | `map(string)` | `{}` | Extra `/etc/hosts` entries for the containers. |
 | `network_id` | `string` | — | Docker network to attach to. |
 | `port` | `number` | `8000` | Web port (changing not yet implemented). |
