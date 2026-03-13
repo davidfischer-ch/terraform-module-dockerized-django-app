@@ -97,7 +97,6 @@ data_directory/
 | `identifier` | `string` | — | Unique name for resources (must match `^[a-z]+(-[a-z0-9]+)*$`). |
 | `enabled` | `bool` | `true` | Start or stop the containers. |
 | `image_id` | `string` | — | Django application Docker image's ID (custom image). |
-| `data_directory` | `string` | — | Host path for persistent volumes. |
 | `app_uid` | `number` | `1001` | UID of the user running the containers and owning the data directories. |
 | `app_gid` | `number` | `1001` | GID of the user running the containers and owning the data directories. |
 | `privileged` | `bool` | `false` | Run the containers in privileged mode. |
@@ -106,6 +105,7 @@ data_directory/
 | `hosts` | `map(string)` | `{}` | Extra `/etc/hosts` entries for the containers. |
 | `network_id` | `string` | — | Docker network to attach to. |
 | `port` | `number` | `8000` | Web port (changing not yet implemented). |
+| `data_directory` | `string` | — | Host path for persistent volumes. |
 | `project_name` | `string` | — | Django project directory name. |
 | `site_name` | `string` | — | Django site display name. |
 | `settings` | `map(string)` | `{}` | Additional environment variables. |
@@ -115,12 +115,13 @@ data_directory/
 | `compress_enabled` | `bool` | `false` | Enable Django Compressor. |
 | `compress_offline` | `bool` | `false` | Enable offline compression. |
 | `csrf_trusted_origins` | `list(string)` | — | CSRF trusted origins. |
-| `debug` | `bool` | — | Enable Django debug mode. |
-| `debug_toolbar` | `bool` | — | Enable Django Debug Toolbar. |
-| `debug_toolbar_template_profiler` | `bool` | — | Enable template profiler. |
+| `debug` | `bool` | `false` | Enable Django debug mode. |
+| `debug_toolbar` | `bool` | `false` | Enable Django Debug Toolbar. |
+| `debug_toolbar_template_profiler` | `bool` | `false` | Enable template profiler. |
 | `default_from_email` | `string` | — | Default sender email. |
 | `domains` | `list(string)` | — | Allowed domains (ALLOWED_HOSTS). |
 | `email_backend` | `string` | `"django.core.mail.backends.dummy.EmailBackend"` | Email backend class. |
+| `email_file_path` | `string` | `""` | File path for file-based email backend. |
 | `email_host` | `string` | `""` | SMTP host. |
 | `email_host_password` | `string` | `""` | SMTP password (sensitive). |
 | `email_host_user` | `string` | `""` | SMTP username. |
@@ -128,7 +129,6 @@ data_directory/
 | `email_subject_prefix` | `string` | — | Email subject prefix. |
 | `email_use_ssl` | `bool` | `true` | Use SSL for SMTP. |
 | `email_use_tls` | `bool` | `false` | Use TLS for SMTP. |
-| `email_file_path` | `string` | `""` | File path for file-based email backend. |
 | `managers` | `list(string)` | `[]` | Django MANAGERS setting. |
 | `broker_host` | `string` | — | Redis broker hostname. |
 | `broker_port` | `number` | `6379` | Redis broker port. |

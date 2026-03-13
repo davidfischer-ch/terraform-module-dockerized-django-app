@@ -281,7 +281,7 @@ variable "broker_password" {
   sensitive   = true
 }
 
-# Cache
+# Cache Endpoint -----------------------------------------------------------------------------------
 
 variable "cache_host" {
   type        = string
