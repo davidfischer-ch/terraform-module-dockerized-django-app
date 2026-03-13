@@ -17,7 +17,6 @@ module "app" {
   source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.1.0"
 
   identifier     = "my-app"
-  enabled        = true
   image_id       = docker_image.app.image_id
   data_directory = "/data/my-app/app"
 
@@ -33,7 +32,6 @@ module "app" {
   admin_name           = "Admin User"
   admin_email          = "admin@example.com"
   csrf_trusted_origins = ["https://my-app.example.com"]
-  debug                = false
   default_from_email   = "noreply@example.com"
   domains              = ["my-app.example.com"]
   email_subject_prefix = "[My App] "
