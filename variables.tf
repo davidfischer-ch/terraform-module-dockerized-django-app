@@ -267,6 +267,7 @@ variable "broker_port" {
 variable "broker_index" {
   type        = number
   description = "Redis database index for the broker."
+  default     = 0
 
   validation {
     condition     = var.broker_index >= 0
@@ -301,6 +302,7 @@ variable "cache_port" {
 variable "cache_index" {
   type        = number
   description = "Redis database index for the cache."
+  default     = 1
 
   validation {
     condition     = var.cache_index >= 0

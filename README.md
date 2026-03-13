@@ -134,11 +134,11 @@ data_directory/
 | `managers` | `list(string)` | `[]` | Django MANAGERS setting. |
 | `broker_host` | `string` | — | Redis broker hostname. |
 | `broker_port` | `number` | `6379` | Redis broker port. |
-| `broker_index` | `number` | — | Redis broker database index. |
+| `broker_index` | `number` | `0` | Redis broker database index. |
 | `broker_password` | `string` | — | Redis broker password (sensitive). |
 | `cache_host` | `string` | — | Redis cache hostname. |
 | `cache_port` | `number` | `6379` | Redis cache port. |
-| `cache_index` | `number` | — | Redis cache database index. |
+| `cache_index` | `number` | `1` | Redis cache database index. |
 | `cache_password` | `string` | — | Redis cache password (sensitive). |
 | `database_host` | `string` | — | PostgreSQL hostname. |
 | `database_port` | `number` | `5432` | PostgreSQL port. |
