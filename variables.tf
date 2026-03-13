@@ -1,6 +1,7 @@
 variable "identifier" {
   type        = string
   description = "Identifier (must be unique, used to name resources)."
+
   validation {
     condition     = regex("^[a-z]+(-[a-z0-9]+)*$", var.identifier) != null
     error_message = "Argument `identifier` must match regex ^[a-z]+(-[a-z0-9]+)*$."
@@ -9,8 +10,8 @@ variable "identifier" {
 
 variable "enabled" {
   type        = bool
-  default     = true
   description = "Toggle the containers (started or stopped)."
+  default     = true
 }
 
 variable "image_id" {
@@ -22,40 +23,40 @@ variable "image_id" {
 
 variable "app_uid" {
   type        = number
-  default     = 1001
   description = "UID of the user running the container and owning the data."
+  default     = 1001
 }
 
 variable "app_gid" {
   type        = number
-  default     = 1001
   description = "GID of the user running the container and owning the data."
+  default     = 1001
 }
 
 variable "privileged" {
   type        = bool
-  default     = false
   description = "Run the container in privileged mode."
+  default     = false
 }
 
 variable "cap_add" {
   type        = set(string)
-  default     = []
   description = "Linux capabilities to add to the container."
+  default     = []
 }
 
 variable "cap_drop" {
   type        = set(string)
-  default     = []
   description = "Linux capabilities to drop from the container."
+  default     = []
 }
 
 # Networking ---------------------------------------------------------------------------------------
 
 variable "hosts" {
   type        = map(string)
-  default     = {}
   description = "Add entries to container hosts file."
+  default     = {}
 }
 
 variable "network_id" {
@@ -64,8 +65,9 @@ variable "network_id" {
 }
 
 variable "port" {
-  type    = number
-  default = 8000
+  type        = number
+  description = "Bind the Django application's HTTP port."
+  default     = 8000
 
   validation {
     condition     = var.port == 8000
@@ -94,169 +96,266 @@ variable "site_name" {
 
 variable "settings" {
   type        = map(string)
-  default     = {}
   description = "Any additional environment variables for the application (e.g. { FOO = \"bar\" })"
+  default     = {}
 }
 
 variable "admin_name" {
-  type = string
+  type        = string
+  description = "Django admin full name."
 }
 
 variable "admin_email" {
-  type = string
+  type        = string
+  description = "Django admin email address."
+
+  validation {
+    condition     = can(regex("^[^@]+@[^@]+$", var.admin_email))
+    error_message = "Argument `admin_email` must be a valid email address."
+  }
 }
 
 variable "admin_url" {
-  type    = string
-  default = "admin"
+  type        = string
+  description = "URL path for the Django admin interface."
+  default     = "admin"
+
+  validation {
+    condition     = length(var.admin_url) > 0
+    error_message = "Argument `admin_url` must not be empty."
+  }
 }
 
 variable "compress_enabled" {
-  type    = bool
-  default = false
+  type        = bool
+  description = "Enable Django Compressor."
+  default     = false
 }
 
 variable "compress_offline" {
-  type    = bool
-  default = false
+  type        = bool
+  description = "Enable Django Compressor offline compression."
+  default     = false
 }
 
 variable "csrf_trusted_origins" {
-  type = list(string)
+  type        = list(string)
+  description = "List of trusted origins for CSRF protection."
 }
 
 variable "debug" {
-  type = bool
+  type        = bool
+  description = "Enable Django debug mode."
+  default     = false
 }
 
 variable "debug_toolbar" {
-  type = bool
+  type        = bool
+  description = "Enable Django Debug Toolbar."
+  default     = false
 }
 
 variable "debug_toolbar_template_profiler" {
-  type = bool
+  type        = bool
+  description = "Enable template profiler in Django Debug Toolbar."
+  default     = false
 }
 
 variable "default_from_email" {
-  type = string
+  type        = string
+  description = "Default sender address for outgoing emails."
+
+  validation {
+    condition     = can(regex("^[^@]+@[^@]+$", var.default_from_email))
+    error_message = "Argument `default_from_email` must be a valid email address."
+  }
 }
 
 variable "domains" {
-  type = list(string)
+  type        = list(string)
+  description = "Allowed domains for the application (used in nginx server_name)."
 }
 
 variable "email_backend" {
-  type    = string
-  default = "django.core.mail.backends.dummy.EmailBackend"
+  type        = string
+  description = "Django email backend class."
+  default     = "django.core.mail.backends.dummy.EmailBackend"
 }
 
 variable "email_file_path" {
-  type    = string
-  default = ""
+  type        = string
+  description = "File path for the file-based email backend."
+  default     = ""
 }
 
 variable "email_host" {
-  type    = string
-  default = ""
+  type        = string
+  description = "SMTP server hostname."
+  default     = ""
 }
 
 variable "email_host_password" {
-  type      = string
-  sensitive = true
-  default   = ""
+  type        = string
+  description = "SMTP server password."
+  default     = ""
+  sensitive   = true
 }
 
 variable "email_host_user" {
-  type    = string
-  default = ""
+  type        = string
+  description = "SMTP server username."
+  default     = ""
 }
 
 variable "email_port" {
-  type    = number
-  default = 465
+  type        = number
+  description = "SMTP server port."
+  default     = 465
+
+  validation {
+    condition     = var.email_port >= 1 && var.email_port <= 65535
+    error_message = "Argument `email_port` must be between 1 and 65535."
+  }
 }
 
 variable "email_subject_prefix" {
-  type = string
+  type        = string
+  description = "Prefix prepended to the subject of emails sent to admins and managers."
 }
 
 variable "email_use_ssl" {
-  type    = bool
-  default = true
+  type        = bool
+  description = "Use implicit TLS (SMTPS) when connecting to the SMTP server."
+  default     = true
 }
 
 variable "email_use_tls" {
-  type    = bool
-  default = false
+  type        = bool
+  description = "Use explicit TLS (STARTTLS) when connecting to the SMTP server."
+  default     = false
 }
 
 variable "managers" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  description = "List of manager email addresses to receive broken link notifications."
+  default     = []
+
+  validation {
+    condition     = alltrue([for m in var.managers : can(regex("^[^@]+@[^@]+$", m))])
+    error_message = "Each entry in `managers` must be a valid email address."
+  }
 }
 
 # Broker Endpoint ----------------------------------------------------------------------------------
 
 variable "broker_host" {
-  type = string
+  type        = string
+  description = "Redis broker hostname."
 }
 
 variable "broker_port" {
-  type    = number
-  default = 6379
+  type        = number
+  description = "Redis broker port."
+  default     = 6379
+
+  validation {
+    condition     = var.broker_port >= 1 && var.broker_port <= 65535
+    error_message = "Argument `broker_port` must be between 1 and 65535."
+  }
 }
 
 variable "broker_index" {
-  type = number
+  type        = number
+  description = "Redis database index for the broker."
+
+  validation {
+    condition     = var.broker_index >= 0
+    error_message = "Argument `broker_index` must be 0 or a positive integer."
+  }
 }
 
 variable "broker_password" {
-  type      = string
-  sensitive = true
+  type        = string
+  description = "Redis broker password."
+  sensitive   = true
 }
 
 # Cache
 
 variable "cache_host" {
-  type = string
+  type        = string
+  description = "Redis cache hostname."
 }
 
 variable "cache_port" {
-  type    = number
-  default = 6379
+  type        = number
+  description = "Redis cache port."
+  default     = 6379
+
+  validation {
+    condition     = var.cache_port >= 1 && var.cache_port <= 65535
+    error_message = "Argument `cache_port` must be between 1 and 65535."
+  }
 }
 
 variable "cache_index" {
-  type = number
+  type        = number
+  description = "Redis database index for the cache."
+
+  validation {
+    condition     = var.cache_index >= 0
+    error_message = "Argument `cache_index` must be 0 or a positive integer."
+  }
 }
 
 variable "cache_password" {
-  type      = string
-  sensitive = true
+  type        = string
+  description = "Redis cache password."
+  sensitive   = true
 }
 
 # Database Endpoint --------------------------------------------------------------------------------
 
 variable "database_host" {
-  type = string
+  type        = string
+  description = "PostgreSQL database hostname."
 }
 
 variable "database_port" {
-  type    = number
-  default = 5432
+  type        = number
+  description = "PostgreSQL database port."
+  default     = 5432
+
+  validation {
+    condition     = var.database_port >= 1 && var.database_port <= 65535
+    error_message = "Argument `database_port` must be between 1 and 65535."
+  }
 }
 
 variable "database_name" {
-  type = string
+  type        = string
+  description = "PostgreSQL database name."
+
+  validation {
+    condition     = length(var.database_name) > 0
+    error_message = "Argument `database_name` must not be empty."
+  }
 }
 
 variable "database_user" {
-  type = string
+  type        = string
+  description = "PostgreSQL database user."
+
+  validation {
+    condition     = length(var.database_user) > 0
+    error_message = "Argument `database_user` must not be empty."
+  }
 }
 
 variable "database_password" {
-  type      = string
-  sensitive = true
+  type        = string
+  description = "PostgreSQL database password."
+  sensitive   = true
 }
 
 # Web Container ------------------------------------------------------------------------------------
