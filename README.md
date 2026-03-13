@@ -97,7 +97,7 @@ data_directory/
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `identifier` | `string` | — | Unique name for resources (must match `^[a-z]+(-[a-z0-9]+)*$`). |
-| `enabled` | `bool` | — | Start or stop the containers. |
+| `enabled` | `bool` | `true` | Start or stop the containers. |
 | `image_id` | `string` | — | Django application Docker image's ID (custom image). |
 | `data_directory` | `string` | — | Host path for persistent volumes. |
 | `app_uid` | `number` | `1001` | UID of the user running the containers and owning the data directories. |
