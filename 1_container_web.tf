@@ -32,8 +32,8 @@ resource "docker_container" "web" {
   dynamic "capabilities" {
     for_each = length(var.cap_add) + length(var.cap_drop) > 0 ? [1] : []
     content {
-      add  = var.cap_add
-      drop = var.cap_drop
+      add  = [for cap in var.cap_add : "CAP_${cap}"]
+      drop = [for cap in var.cap_drop : "CAP_${cap}"]
     }
   }
 
