@@ -1,5 +1,14 @@
 # Changelog
 
+## Release v1.1.1 (2026-03-13)
+
+### Fix and enhancements
+
+* Add `broker_index` (default `0`) and `cache_index` (default `1`) missing defaults
+* Set `enabled` default to `true`
+* Refine variable descriptions, validators, and attribute ordering
+* Remove redundant default values from examples and README
+
 ## Release v1.1.0 (2026-03-13)
 
 ### Breaking changes
