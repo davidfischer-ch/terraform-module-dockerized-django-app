@@ -14,7 +14,7 @@ See [django-stack examples](https://github.com/davidfischer-ch/terraform-module-
 
 ```hcl
 module "app" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.1.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.2.0"
 
   identifier     = "my-app"
   image_id       = docker_image.app.image_id
