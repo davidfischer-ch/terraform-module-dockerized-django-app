@@ -6,7 +6,7 @@ Manage a standardized Django application's Web and Celery components.
 * Creates a web container (Uvicorn ASGI), a Celery beat scheduler, and Celery workers (via `for_each`)
 * Parameters passed as environment variables stored in a `.env` file
 * Generates a random `SECRET_KEY` automatically
-* Supports Django Compressor, email backends, and debug toolbar
+* Supports email backends, and debug toolbar
 
 ## Usage
 
@@ -112,12 +112,9 @@ data_directory/
 | `admin_name` | `string` | — | Admin display name. |
 | `admin_email` | `string` | — | Admin email address. |
 | `admin_url` | `string` | `"admin"` | Admin URL prefix. |
-| `compress_enabled` | `bool` | `false` | Enable Django Compressor. |
-| `compress_offline` | `bool` | `false` | Enable offline compression. |
 | `csrf_trusted_origins` | `list(string)` | — | CSRF trusted origins. |
 | `debug` | `bool` | `false` | Enable Django debug mode. |
 | `debug_toolbar` | `bool` | `false` | Enable Django Debug Toolbar. |
-| `debug_toolbar_template_profiler` | `bool` | `false` | Enable template profiler. |
 | `default_from_email` | `string` | — | Default sender email. |
 | `domains` | `list(string)` | — | Allowed domains (ALLOWED_HOSTS). |
 | `email_backend` | `string` | `"django.core.mail.backends.dummy.EmailBackend"` | Email backend class. |

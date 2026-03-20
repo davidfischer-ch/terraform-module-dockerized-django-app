@@ -44,7 +44,7 @@ variable "cap_add" {
   description = "Linux capabilities to add to the container."
   default     = []
   validation {
-    condition = length(setsubtract(var.cap_add, local.linux_capabilities)) == 0
+    condition     = length(setsubtract(var.cap_add, local.linux_capabilities)) == 0
     error_message = "Each entry in `cap_add` must be a valid Linux capability name."
   }
 }
@@ -54,7 +54,7 @@ variable "cap_drop" {
   description = "Linux capabilities to drop from the container."
   default     = []
   validation {
-    condition = length(setsubtract(var.cap_drop, local.linux_capabilities)) == 0
+    condition     = length(setsubtract(var.cap_drop, local.linux_capabilities)) == 0
     error_message = "Each entry in `cap_drop` must be a valid Linux capability name."
   }
 }
@@ -134,18 +134,6 @@ variable "admin_url" {
   }
 }
 
-variable "compress_enabled" {
-  type        = bool
-  description = "Enable Django Compressor."
-  default     = false
-}
-
-variable "compress_offline" {
-  type        = bool
-  description = "Enable Django Compressor offline compression."
-  default     = false
-}
-
 variable "csrf_trusted_origins" {
   type        = list(string)
   description = "List of trusted origins for CSRF protection."
@@ -160,12 +148,6 @@ variable "debug" {
 variable "debug_toolbar" {
   type        = bool
   description = "Enable Django Debug Toolbar."
-  default     = false
-}
-
-variable "debug_toolbar_template_profiler" {
-  type        = bool
-  description = "Enable template profiler in Django Debug Toolbar."
   default     = false
 }
 
