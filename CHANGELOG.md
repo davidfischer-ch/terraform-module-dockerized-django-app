@@ -1,5 +1,17 @@
 # Changelog
 
+## Release v1.3.0 (2026-03-20)
+
+### Minor compatibility breaks
+
+* Remove variable `compress_enabled`
+* Remove variable `compress_offline`
+* Remove variable `debug_toolbar_template_profiler`
+
+### Migrations
+
+* Declare `COMPRESS_ENABLED` (...) environment variables in `settings` if required
+
 ## Release v1.2.0 (2026-03-14)
 
 ### Minor compatibility breaks
