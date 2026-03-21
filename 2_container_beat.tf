@@ -68,9 +68,5 @@ resource "docker_container" "beat" {
     read_only      = false
   }
 
-  provisioner "local-exec" {
-    command = <<EOT
-      chown ${var.app_uid}:${var.app_gid} "${local.host_workers_directory}"
-    EOT
-  }
+  depends_on = [terraform_data.data_directories]
 }
