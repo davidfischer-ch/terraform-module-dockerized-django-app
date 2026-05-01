@@ -1,5 +1,11 @@
 # Changelog
 
+## Release v1.3.2 (2026-05-01)
+
+### Features
+
+* Add `extra_volumes` variable to mount additional volumes in the web, beat and worker containers
+
 ## Release v1.3.1 (2026-03-21)
 
 ### Fix and enhancements
