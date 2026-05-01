@@ -93,5 +93,16 @@ resource "docker_container" "workers" {
     read_only      = false
   }
 
+  dynamic "volumes" {
+    for_each = var.extra_volumes
+    content {
+      container_path = volumes.value.container_path
+      from_container = volumes.value.from_container
+      host_path      = volumes.value.host_path
+      read_only      = volumes.value.read_only
+      volume_name    = volumes.value.volume_name
+    }
+  }
+
   depends_on = [terraform_data.data_directories]
 }
