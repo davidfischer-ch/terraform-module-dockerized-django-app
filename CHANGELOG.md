@@ -1,5 +1,12 @@
 # Changelog
 
+## Release v1.3.3 (2026-09-04)
+
+### Features
+
+* Add `cap_add` and `extra_volumes` to the `workers` variable, granted to one worker rather than to
+  every container of the stack
+
 ## Release v1.3.2 (2026-05-01)
 
 ### Features
