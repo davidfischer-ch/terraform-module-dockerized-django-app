@@ -29,9 +29,9 @@ resource "docker_container" "workers" {
   privileged = var.privileged
 
   dynamic "capabilities" {
-    for_each = length(var.cap_add) + length(var.cap_drop) > 0 ? [1] : []
+    for_each = length(setunion(var.cap_add, each.value.cap_add)) + length(var.cap_drop) > 0 ? [1] : []
     content {
-      add  = [for cap in var.cap_add : "CAP_${cap}"]
+      add  = [for cap in setunion(var.cap_add, each.value.cap_add) : "CAP_${cap}"]
       drop = [for cap in var.cap_drop : "CAP_${cap}"]
     }
   }
@@ -94,7 +94,7 @@ resource "docker_container" "workers" {
   }
 
   dynamic "volumes" {
-    for_each = var.extra_volumes
+    for_each = merge(var.extra_volumes, each.value.extra_volumes)
     content {
       container_path = volumes.value.container_path
       from_container = volumes.value.from_container

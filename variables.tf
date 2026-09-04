@@ -398,6 +398,18 @@ variable "workers" {
     queues        = list(string)
     log_level     = optional(string, "info")
     extra_options = optional(list(string), [])
+    # Granted to this worker alone, on top of the stack-wide `cap_add` and `extra_volumes`. A queue
+    # whose tasks drive hardware (a radio, a serial port) needs capabilities and device sockets the
+    # web container has no business holding: giving them to the stack would put them on the process
+    # answering the internet.
+    cap_add = optional(set(string), [])
+    extra_volumes = optional(map(object({
+      container_path = optional(string)
+      from_container = optional(string)
+      host_path      = optional(string)
+      read_only      = optional(bool)
+      volume_name    = optional(string)
+    })), {})
   }))
   description = "Celery workers settings. See `celery worker --help` for detailled description."
 
@@ -407,5 +419,12 @@ variable "workers" {
       contains(["debug", "info", "warning", "error", "critical", "fatal"], w.log_level)
     ])
     error_message = "Log level should be one of `debug`, `info`, `warning`, `error`, `critical`, `fatal`"
+  }
+
+  validation {
+    condition = alltrue([
+      for w in var.workers : length(setsubtract(w.cap_add, local.linux_capabilities)) == 0
+    ])
+    error_message = "Each entry in a worker's `cap_add` must be a valid Linux capability name."
   }
 }
