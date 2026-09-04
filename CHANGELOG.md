@@ -1,5 +1,12 @@
 # Changelog
 
+## Release v1.3.4 (2026-09-04)
+
+### Features
+
+* Add `security_opt` to the `workers` variable, letting one worker name the confinement it needs
+  without relaxing it for the whole stack
+
 ## Release v1.3.3 (2026-09-04)
 
 ### Features
