@@ -403,6 +403,10 @@ variable "workers" {
     # web container has no business holding: giving them to the stack would put them on the process
     # answering the internet.
     cap_add = optional(set(string), [])
+    # Confinement this worker needs relaxed or replaced, `docker run --security-opt` verbatim. A
+    # container talking to a host D-Bus needs a profile that mediates it, and `docker-default`
+    # carries no D-Bus rule at all, which denies every message.
+    security_opt = optional(list(string), [])
     extra_volumes = optional(map(object({
       container_path = optional(string)
       from_container = optional(string)

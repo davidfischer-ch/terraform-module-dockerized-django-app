@@ -26,7 +26,8 @@ resource "docker_container" "workers" {
   restart  = "always"
   # wait   = true
 
-  privileged = var.privileged
+  privileged    = var.privileged
+  security_opts = each.value.security_opt
 
   dynamic "capabilities" {
     for_each = length(setunion(var.cap_add, each.value.cap_add)) + length(var.cap_drop) > 0 ? [1] : []

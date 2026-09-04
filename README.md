@@ -83,6 +83,10 @@ module "app" {
       log_level     = "info"
       extra_options = ["--concurrency", "1"]
       cap_add       = ["NET_ADMIN"]
+      # `docker-default` mediates D-Bus while carrying no D-Bus rule, which denies every message:
+      # the socket connects and the first method call is refused. A profile of your own, or
+      # `apparmor=unconfined` if you are willing to drop the confinement entirely.
+      security_opt  = ["apparmor=docker-estate-domotic"]
       extra_volumes = {
         dbus = {
           container_path = "/run/dbus"
@@ -160,7 +164,7 @@ data_directory/
 | `database_password` | `string` | — | PostgreSQL password (sensitive). |
 | `web` | `object` | — | Web engine settings (`concurrency`, `log_level`). |
 | `beat` | `object` | — | Celery beat settings (`log_level`, `extra_options`). |
-| `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`, `cap_add`, `extra_volumes`). The last two are granted to that worker alone, on top of the stack-wide ones. |
+| `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`, `cap_add`, `security_opt`, `extra_volumes`). The last three are granted to that worker alone, on top of the stack-wide ones. |
 
 ## Outputs
 
