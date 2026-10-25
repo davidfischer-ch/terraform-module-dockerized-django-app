@@ -22,6 +22,33 @@ resource "docker_container" "beat" {
   restart  = "always"
   # wait   = true
 
+  # Beat sending, the broker carrying and a worker running: the heartbeat file is fresh.
+  dynamic "healthcheck" {
+    for_each = var.beat.heartbeat == null ? [] : [var.beat.heartbeat]
+    content {
+      test = [
+        "CMD-SHELL",
+        join(" ", [
+          "test $(( $(date +%s) - $(stat -c %Y",
+          "${local.container_workers_directory}/${healthcheck.value.file}",
+          "2>/dev/null || echo 0) )) -lt ${healthcheck.value.max_age}",
+        ]),
+      ]
+      interval     = "1m"
+      timeout      = "10s"
+      retries      = 3
+      start_period = "${healthcheck.value.max_age}s"
+    }
+  }
+
+  dynamic "labels" {
+    for_each = var.beat.heartbeat == null ? [] : [1]
+    content {
+      label = "autoheal"
+      value = "true"
+    }
+  }
+
   privileged = var.privileged
 
   dynamic "capabilities" {

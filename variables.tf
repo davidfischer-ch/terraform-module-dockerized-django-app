@@ -372,8 +372,13 @@ variable "web" {
   description = "Web engine settings."
 
   validation {
-    condition     = contains(["critical", "error", "warning", "info", "debug", "trace"], var.web.log_level)
-    error_message = "Log level should be one of `critical`, `error`, `warning`, `info`, `debug`, `trace`"
+    condition = contains(
+      ["critical", "error", "warning", "info", "debug", "trace"],
+      var.web.log_level
+    )
+    error_message = <<-EOT
+      Log level should be one of `critical`, `error`, `warning`, `info`, `debug`, `trace`
+    EOT
   }
 }
 
@@ -383,12 +388,31 @@ variable "beat" {
   type = object({
     log_level     = optional(string, "info")
     extra_options = optional(list(string), [])
+
+    # A file in the workers directory, touched by a task beat schedules: the container is healthy
+    # while the file is younger than `max_age` seconds, and labelled for autoheal to restart it.
+    heartbeat = optional(object({
+      file    = optional(string, "heartbeat")
+      max_age = optional(number, 300)
+    }))
   })
   description = "Celery beat settings."
 
   validation {
-    condition     = contains(["debug", "info", "warning", "error", "critical", "fatal"], var.beat.log_level)
-    error_message = "Log level should be one of `debug`, `info`, `warning`, `error`, `critical`, `fatal`"
+    condition = contains(
+      ["debug", "info", "warning", "error", "critical", "fatal"],
+      var.beat.log_level
+    )
+    error_message = <<-EOT
+      Log level should be one of `debug`, `info`, `warning`, `error`, `critical`, `fatal`
+    EOT
+  }
+
+  validation {
+    condition     = var.beat.heartbeat == null || try(var.beat.heartbeat.max_age >= 120, false)
+    error_message = <<-EOT
+      A heartbeat's `max_age` must be at least 120 seconds: the task runs every minute.
+    EOT
   }
 }
 
@@ -398,15 +422,18 @@ variable "workers" {
     queues        = list(string)
     log_level     = optional(string, "info")
     extra_options = optional(list(string), [])
+
     # Granted to this worker alone, on top of the stack-wide `cap_add` and `extra_volumes`. A queue
     # whose tasks drive hardware (a radio, a serial port) needs capabilities and device sockets the
     # web container has no business holding: giving them to the stack would put them on the process
     # answering the internet.
     cap_add = optional(set(string), [])
-    # Confinement this worker needs relaxed or replaced, `docker run --security-opt` verbatim. A
-    # container talking to a host D-Bus needs a profile that mediates it, and `docker-default`
+
+    # Confinement this worker needs relaxed or replaced, `docker run --security-opt` verbatim.
+    # A container talking to a host D-Bus needs a profile that mediates it, and `docker-default`
     # carries no D-Bus rule at all, which denies every message.
     security_opt = optional(list(string), [])
+
     extra_volumes = optional(map(object({
       container_path = optional(string)
       from_container = optional(string)
@@ -422,7 +449,9 @@ variable "workers" {
       for w in var.workers :
       contains(["debug", "info", "warning", "error", "critical", "fatal"], w.log_level)
     ])
-    error_message = "Log level should be one of `debug`, `info`, `warning`, `error`, `critical`, `fatal`"
+    error_message = <<-EOT
+      Log level should be one of `debug`, `info`, `warning`, `error`, `critical`, `fatal`
+    EOT
   }
 
   validation {

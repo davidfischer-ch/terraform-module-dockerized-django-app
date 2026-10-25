@@ -83,10 +83,12 @@ module "app" {
       log_level     = "info"
       extra_options = ["--concurrency", "1"]
       cap_add       = ["NET_ADMIN"]
+
       # `docker-default` mediates D-Bus while carrying no D-Bus rule, which denies every message:
       # the socket connects and the first method call is refused. A profile of your own, or
       # `apparmor=unconfined` if you are willing to drop the confinement entirely.
-      security_opt  = ["apparmor=docker-estate-domotic"]
+      security_opt = ["apparmor=docker-estate-domotic"]
+
       extra_volumes = {
         dbus = {
           container_path = "/run/dbus"
@@ -162,9 +164,34 @@ data_directory/
 | `database_name` | `string` | — | PostgreSQL database name. |
 | `database_user` | `string` | — | PostgreSQL user. |
 | `database_password` | `string` | — | PostgreSQL password (sensitive). |
-| `web` | `object` | — | Web engine settings (`concurrency`, `log_level`). |
-| `beat` | `object` | — | Celery beat settings (`log_level`, `extra_options`). |
-| `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`, `cap_add`, `security_opt`, `extra_volumes`). The last three are granted to that worker alone, on top of the stack-wide ones. |
+| `web` | `object` | — | Web engine settings, see [Web](#web). |
+| `beat` | `object` | — | Celery beat settings, see [Beat](#beat). |
+| `workers` | `map(object)` | — | Celery workers settings, see [Workers](#workers). |
+
+### Web
+
+* `concurrency`: the number of Uvicorn workers, 1 by default.
+* `log_level`: one of `critical`, `error`, `warning`, `info` (the default), `debug`, `trace`.
+
+### Beat
+
+* `log_level`: one of `debug`, `info` (the default), `warning`, `error`, `critical`, `fatal`.
+* `extra_options`: passed to `celery beat` as they are.
+* `heartbeat`: optional. With it, beat gets a healthcheck on the age of a file in the workers
+  directory, and the `autoheal=true` label for autoheal to restart it once the file goes stale. The
+  application schedules a task that touches the file every minute.
+    * `file`: the file's name in the workers directory, `heartbeat` by default.
+    * `max_age`: in seconds, 300 by default and at least 120.
+
+### Workers
+
+A map of workers, each with:
+
+* `name` and `queues`: the worker's name and the queues it consumes.
+* `log_level`: one of `debug`, `info` (the default), `warning`, `error`, `critical`, `fatal`.
+* `extra_options`: passed to `celery worker` as they are.
+* `cap_add`, `security_opt` and `extra_volumes`: granted to that worker alone, on top of the
+  stack-wide `cap_add` and `extra_volumes`. `security_opt` is `docker run --security-opt` verbatim.
 
 ## Outputs
 
