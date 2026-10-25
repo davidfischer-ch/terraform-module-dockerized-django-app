@@ -1,5 +1,22 @@
 # Changelog
 
+## Release v1.3.5 (2026-10-25)
+
+### Features
+
+Beat:
+
+* Add `heartbeat` to the `beat` variable
+    * Healthcheck beat on the age of a file in the workers directory, `heartbeat` by default
+    * Label beat `autoheal=true` for autoheal to restart it once the file goes stale
+    * Configure the staleness with `max_age`, 300 seconds by default and at least 120
+
+### Fix and enhancements
+
+Docs:
+
+* Describe the `web`, `beat` and `workers` settings in their own README sections, out of the variables table
+
 ## Release v1.3.4 (2026-09-04)
 
 ### Features
