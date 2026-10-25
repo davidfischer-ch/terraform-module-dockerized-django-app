@@ -30,7 +30,9 @@ resource "docker_container" "workers" {
   security_opts = each.value.security_opt
 
   dynamic "capabilities" {
-    for_each = length(setunion(var.cap_add, each.value.cap_add)) + length(var.cap_drop) > 0 ? [1] : []
+    for_each = (
+      length(setunion(var.cap_add, each.value.cap_add)) + length(var.cap_drop) > 0 ? [1] : []
+    )
     content {
       add  = [for cap in setunion(var.cap_add, each.value.cap_add) : "CAP_${cap}"]
       drop = [for cap in var.cap_drop : "CAP_${cap}"]
